@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+import unittest
 
 class TestAddGroup(unittest.TestCase):
     def setUp(self):
@@ -41,10 +38,12 @@ class TestAddGroup(unittest.TestCase):
         except NoSuchElementException as e: return False
         return True
     
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
+    def is_alert_present(wd):
+        try:
+            wd.switch_to_alert().text
+            return True
+        except:
+            return False
 
     
     def tearDown(self):
