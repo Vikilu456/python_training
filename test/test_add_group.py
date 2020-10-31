@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.group import Group
 from fixture.application import Application
-from fixture.group import GroupHelper
 import pytest
 
 @pytest.fixture
