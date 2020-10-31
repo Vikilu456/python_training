@@ -32,3 +32,20 @@ class ContactHelper:
         wd.find_element_by_name("byear").send_keys(contact.byear)
         # submit contact creation
         wd.find_element_by_name("submit").click()
+        self.return_to_home_page()
+
+    def modify_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        wd.find_element_by_name("update").click()
+        self.return_to_home_page()
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+
+    def return_to_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home page").click()
