@@ -23,7 +23,7 @@ class GroupHelper:
         wd.find_element_by_name("submit").click()
         self.return_to_groups_page()
 
-    def modify_first_group(self, group):
+    def edit_first_group(self, group):
         wd = self.app.wd
         self.open_groups_page()
         wd.find_element_by_name("selected[]").click()
