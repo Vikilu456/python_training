@@ -27,6 +27,7 @@ class GroupHelper:
 
     def select_first_group(self):
         wd = self.app.wd
+        wd.find_element_by_name("selected[]")
         wd.find_element_by_name("selected[]").click()
 
     def fill_group_form(self, group):
