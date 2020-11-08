@@ -18,7 +18,9 @@ class SessionHelper:
 
     def ensure_logout(self):
         wd = self.app.wd
+        wd.implicitly_wait(1)
         if self.is_logged_in():
+
             self.logout()
 
     def is_logged_in(self):
@@ -31,6 +33,7 @@ class SessionHelper:
 
     def ensure_login(self, username, password):
         wd = self.app.wd
+        wd.implicitly_wait(1)
         if self.is_logged_in():
             if self.is_logged_in_as(username):
                 return
