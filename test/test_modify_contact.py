@@ -1,4 +1,5 @@
 from model.contact import Contact
+from random import randrange
 
 def test_modify_name_data(app):
     if app.contact.count() == 0:
@@ -9,13 +10,14 @@ def test_modify_name_data(app):
         ))
 
     old_contacts = app.contact.get_contact_list()
+    index = randrange(len(old_contacts))
     contact = Contact(
         firstname="new_Fname",
         middlename="new_mName",
         lastname="new_lName",
     )
     contact.id = old_contacts[0].id
-    app.contact.edit_first_contact(contact)
+    app.contact.modify_contact_by_index(contact, index)
     new_contacts = app.contact.get_contact_list()
     assert len(old_contacts) == app.contact.count()
     old_contacts[0] = contact
