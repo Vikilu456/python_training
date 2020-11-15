@@ -1,5 +1,5 @@
 from model.contact import Contact
-
+import time
 class ContactHelper:
 
     def __init__(self, app):
@@ -45,6 +45,7 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        wd.find_element_by_css_selector('div.msgbox')
 
     def return_to_home_page(self):
         wd = self.app.wd
