@@ -1,3 +1,5 @@
+from model.contact import Contact
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -57,3 +59,14 @@ class ContactHelper:
         wd = self.app.wd
         if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_xpath("//input[@value='Send e-Mail']")) > 0):
             wd.find_element_by_link_text("home").click()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        contacts = []
+        for element in wd.find_elements_by_css_selector("tr[name=entry]"):
+            firstname = element.find_element_by_css_selector("td:nth-of-type(3)").text
+            lastname = element.find_element_by_css_selector("td:nth-of-type(2)").text
+            id = element.find_element_by_name("selected[]").get_attribute("id")
+            contacts.append(Contact(lastname=lastname, id=id, firstname=firstname))
+        return contacts
