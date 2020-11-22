@@ -34,7 +34,6 @@ class SessionHelper:
         wd = self.app.wd
         return wd.find_element_by_xpath("//div[@id='top']/form/b").text[1:-1]
 
-
     def ensure_login(self, username, password):
         wd = self.app.wd
         wd.implicitly_wait(1)
