@@ -28,7 +28,7 @@ class Contact:
         self.all_emails_from_view_page = all_emails_from_view_page
 
     def __repr__(self):
-        return "%s" % (self.all_emails_from_view_page)
+        return "%s:%s" % (self.firstname, self.lastname)
 
     def __eq__(self, other):
         return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname, self.lastname == other.lastname

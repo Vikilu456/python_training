@@ -11,6 +11,7 @@ class ContactHelper:
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
         wd.find_element_by_name("submit").click()
+        wd.find_element_by_css_selector('div.msgbox')
         self.return_to_home_page()
         self.contact_cache = None
 
