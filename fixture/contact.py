@@ -75,6 +75,15 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Add to']").click()
         self.return_to_contact_group_page()
 
+    def delete_contact_from_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.choose_option("group", group_id)
+        self.select_contact_by_id(contact_id)
+        wd.find_element_by_name("remove")
+        wd.find_element_by_name("remove").click()
+        self.return_to_contact_group_page()
+
     def return_to_contact_group_page(self):
         wd = self.app.wd
         cell = wd.find_element_by_css_selector('div.msgbox')
