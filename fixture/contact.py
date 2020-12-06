@@ -1,4 +1,5 @@
 from model.contact import Contact
+from selenium.webdriver.support.ui import Select
 import re
 
 
@@ -66,6 +67,24 @@ class ContactHelper:
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
 
+    def add_contact_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id(contact_id)
+        self.choose_option("to_group", group_id)
+        wd.find_element_by_xpath("//input[@value='Add to']").click()
+        self.return_to_contact_group_page()
+
+    def return_to_contact_group_page(self):
+        wd = self.app.wd
+        cell = wd.find_element_by_css_selector('div.msgbox')
+        cell.find_element_by_tag_name("a").click()
+
+    def choose_option(self, field_name, value):
+        wd = self.app.wd
+        wd.find_element_by_name(field_name).click()
+        Select(wd.find_element_by_name(field_name)).select_by_value(value)
+
     def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.open_home_page()
@@ -108,6 +127,24 @@ class ContactHelper:
             wd.find_element_by_link_text("home").click()
 
     contact_cache = None
+    contact_group_cache = None
+
+    def get_contact_list_from_group_page(self, group):
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.open_contact_group(group)
+            self.contact_group_cache = []
+            for row in wd.find_elements_by_name("entry"):
+                cells = row.find_elements_by_tag_name("td")
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                self.contact_group_cache.append(Contact(id=id))
+        return list(self.contact_group_cache)
+
+    def open_contact_group(self, group):
+        wd = self.app.wd
+        self.open_home_page()
+        self.choose_option("group", group)
 
     def get_contact_list(self):
         if self.contact_cache is None:
