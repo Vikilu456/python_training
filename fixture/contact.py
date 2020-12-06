@@ -1,6 +1,7 @@
 from model.contact import Contact
 import re
 
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -18,11 +19,22 @@ class ContactHelper:
     def modify_first_contact(self):
         self.modify_contact_by_index(0)
 
-    def modify_contact_by_index(self, contact, index):
+    def modify_contact_by_index(self, new_contact_data, index):
         wd = self.app.wd
         self.open_home_page()
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
-        self.fill_contact_form(contact)
+        self.fill_contact_form(new_contact_data)
+        wd.find_element_by_name("update").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+    def modify_contact_by_id(self, new_contact_data, id):
+        wd = self.app.wd
+        self.open_home_page()
+        origin_element = wd.find_element_by_css_selector("input[id='%s']" % id)
+        parent_element = origin_element.parent
+        parent_element.find_element_by_xpath("//img[@alt='Edit']").click()
+        self.fill_contact_form(new_contact_data)
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
         self.contact_cache = None
@@ -63,9 +75,22 @@ class ContactHelper:
         wd.find_element_by_css_selector('div.msgbox')
         self.contact_cache = None
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id(id)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        wd.find_element_by_css_selector('div.msgbox')
+        self.contact_cache = None
+
     def select_contact_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[id='%s']" % id).click()
 
     def return_to_home_page(self):
         wd = self.app.wd
@@ -78,7 +103,8 @@ class ContactHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_xpath("//input[@value='Send e-Mail']")) > 0):
+        if not (wd.current_url.endswith("/addressbook/") and len(
+                wd.find_elements_by_xpath("//input[@value='Send e-Mail']")) > 0):
             wd.find_element_by_link_text("home").click()
 
     contact_cache = None
@@ -152,4 +178,3 @@ class ContactHelper:
         all_emails = list(map(lambda x: x.text, wd.find_elements_by_css_selector("div[id='content']>a")))
         return Contact(all_emails_from_view_page=all_emails, homephone=homephone, workphone=workphone,
                        mobilephone=mobilephone, secondaryphone=secondaryphone)
-
