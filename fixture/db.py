@@ -29,10 +29,11 @@ class DbFixture:
         list = []
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select id, firstname, lastname, address from addressbook")
+            cursor.execute("select id, firstname, lastname, address, email, email2, email3, home, mobile, work from addressbook")
             for row in cursor:
-                (id, firstname, lastname, address) = row
-                list.append(Contact(id=str(id), lastname=lastname, firstname=firstname, address=address))
+                (id, firstname, lastname, address, email, email2, email3, home, mobile, work) = row
+                list.append(Contact(id=str(id), lastname=lastname, firstname=firstname, address=address, email=email,
+                                    email2=email2, email3=email3, homephone=home, mobilephone=mobile, workphone=work))
         finally:
             cursor.close()
         return list
