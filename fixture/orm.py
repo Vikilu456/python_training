@@ -20,6 +20,14 @@ class ORMFixture:
         id = PrimaryKey(int, column='id')
         firstname = Optional(str, column='firstname')
         lastname = Optional(str, column='lastname')
+        address = Optional(str, column='address')
+        email = Optional(str, column='email')
+        email2 = Optional(str, column='email2')
+        email3 = Optional(str, column='email3')
+        homephone = Optional(str, column='home')
+        mobilephone = Optional(str, column='mobile')
+        workphone = Optional(str, column='work')
+        secondaryphone = Optional(str, column='phone2')
         groups = Set(lambda: ORMFixture.ORMGroup, table="address_in_groups", column="group_id", reverse="contacts", lazy=True)
 
     def __init__(self, host, name, user, password):
@@ -34,7 +42,9 @@ class ORMFixture:
 
     def convert_contacts_to_model(self, contacts):
         def convert(contact):
-            return Contact(id=str(contact.id), firstname=contact.firstname, lastname=contact.lastname)
+            return Contact(id=str(contact.id), firstname=contact.firstname, lastname=contact.lastname, address=contact.address,
+                           email=contact.email, email2=contact.email2, email3=contact.email3, homephone=contact.homephone,
+                           mobilephone=contact.mobilephone, workphone=contact.workphone, secondaryphone=contact.secondaryphone)
         return list(map(convert, contacts))
 
     @db_session

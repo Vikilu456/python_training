@@ -2,7 +2,7 @@ from model.group import Group
 from model.contact import Contact
 import random
 
-def test_add_contact_to_group(app, db):
+def test_delete_contact_to_group(app, db):
     if app.group.count() == 0:
         app.group.create(Group(name="test"))
     if app.contact.count() == 0:
