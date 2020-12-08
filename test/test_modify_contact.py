@@ -2,7 +2,7 @@ from model.contact import Contact
 import random
 
 
-def test_modify_name_data(app, db, json_contacts, check_ui):
+def test_modify_name_data(app, db, json_contacts, check_ui, orm):
     if app.contact.count() == 0:
         app.contact.create(Contact(
             firstname="Fname",

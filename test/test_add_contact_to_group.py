@@ -5,19 +5,18 @@ import random
 def test_add_contact_to_group(app, db):
     if app.group.count() == 0:
         app.group.create(Group(name="test"))
-    if app.contact.count() == 0:
+
+    # выбрали случайную группу
+    group = random.choice(db.get_group_list())
+    # проверили наличие "свободных контактов" вне выбранной группы, создали новый контакт, если "свободных" нет
+    if not db.get_contacts_not_in_group(Group(id=str(group.id))):
         app.contact.create(Contact(
             firstname="Fname",
             lastname="lName"
         ))
-
-    # получаем данные из базы для выбора random контакта и присоединения к random группе
-    list_contacts = db.get_contact_list()
-    list_groups = db.get_group_list()
-    contact = random.choice(list_contacts)
-    group = random.choice(list_groups)
-    # выполняем присоединение random контакта к random группе
+    # случайно выбрали из списка, несодержащихся в группе контактов, один контакт
+    contact = random.choice(db.get_contacts_not_in_group(Group(id=str(group.id))))
+    # добавили случайный контакт в группу, в которой его нет
     app.contact.add_contact_to_group(contact.id, group.id)
-    # берем из базы данные о контактах в группах
-    db_contacts = db.get_contacts_in_group()
-    assert list(filter(lambda x: x.group_id == int(group.id), db_contacts)) == sorted(app.contact.get_contact_list_from_group_page(group.id), key=Group.id_or_max)
+    assert sorted(db.get_contacts_in_group(Group(id=str(group.id))), key=Group.id_or_max) == sorted(
+        app.contact.get_contact_list_from_group_page(group.id), key=Group.id_or_max)
